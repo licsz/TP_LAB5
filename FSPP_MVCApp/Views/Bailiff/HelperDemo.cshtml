@@ -1,0 +1,108 @@
+@using FSPP_MVCApp.Helpers
+@{
+    ViewBag.Title = "Демонстрация вспомогательных методов";
+    bool useExternalHelper = ViewData["UseExternalHelper"] != null && (bool)ViewData["UseExternalHelper"];
+}
+
+<h2>Демонстрация вспомогательных методов</h2>
+
+<div class="row">
+    <div class="col-md-12">
+        <h3>Тип текущего вспомогательного метода: @(useExternalHelper ? "Внешний" : "Внутренний")</h3>
+        <p>
+            @Html.ActionLink("Переключить тип метода", "ToggleHelper")
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4>Пример 1: Стандартное производство</h4>
+            </div>
+            <div class="panel-body">
+                @if (useExternalHelper)
+                {
+                    @Html.CaseStatistics(25000m, "В производстве")
+                }
+                else
+                {
+                    @InternalHelper(25000m, "В производстве")
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4>Пример 2: Крупное производство</h4>
+            </div>
+            <div class="panel-body">
+                @if (useExternalHelper)
+                {
+                    @Html.CaseStatistics(75000m, "В производстве")
+                }
+                else
+                {
+                    @InternalHelper(75000m, "В производстве")
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4>Пример 3: Завершенное производство</h4>
+            </div>
+            <div class="panel-body">
+                @if (useExternalHelper)
+                {
+                    @Html.CaseStatistics(45000m, "Завершено")
+                }
+                else
+                {
+                    @InternalHelper(45000m, "Завершено")
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <p>
+            @Html.ActionLink("Вернуться к списку", "Index")
+        </p>
+    </div>
+</div>
+
+@* Внутренний вспомогательный метод *@
+@helper InternalHelper(decimal debtAmount, string caseStatus)
+{
+    string cssClass = caseStatus == "Завершено" ? "completed-case" : "active-case";
+    string message;
+    
+    if (caseStatus == "Завершено")
+    {
+        message = "Исполнительное производство завершено.";
+    }
+    else if (debtAmount > 50000)
+    {
+        message = "Приоритетное взыскание!";
+    }
+    else
+    {
+        message = "В работе.";
+    }
+    
+    <div class="internal-helper @cssClass">
+        <h4>Внутренний Helper</h4>
+        <p>Сумма к взысканию: <strong>@debtAmount.ToString("C")</strong></p>
+        <p>Текущее состояние: <strong>@caseStatus</strong></p>
+        <p><em>@message</em></p>
+    </div>
+} 

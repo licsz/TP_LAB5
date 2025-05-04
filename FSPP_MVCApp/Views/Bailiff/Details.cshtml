@@ -1,0 +1,66 @@
+@model FSPP_MVCApp.Models.BailiffModel
+
+@{
+    ViewBag.Title = "Детали исполнительного производства";
+}
+
+<h2>Просмотр данных исполнительного производства</h2>
+
+<div>
+    <h4>Исполнительное производство №@Model.CaseNumber</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.LabelFor(model => model.Id)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+
+        <dt>
+            @Html.LabelFor(model => model.DebtorName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DebtorName)
+        </dd>
+
+        <dt>
+            @Html.LabelFor(model => model.DebtAmount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DebtAmount)
+        </dd>
+
+        <dt>
+            @Html.LabelFor(model => model.CaseOpenDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CaseOpenDate)
+        </dd>
+
+        <dt>
+            @Html.LabelFor(model => model.CaseNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CaseNumber)
+        </dd>
+
+        <dt>
+            @Html.LabelFor(model => model.CaseStatus)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CaseStatus)
+        </dd>
+
+        <dt>
+            @Html.LabelFor(model => model.ContactPhone)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ContactPhone)
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Редактировать", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Вернуться к списку", "Index")
+</p> 

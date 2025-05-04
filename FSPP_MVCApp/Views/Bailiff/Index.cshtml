@@ -1,0 +1,84 @@
+@model List<FSPP_MVCApp.Models.BailiffModel>
+@using FSPP_MVCApp.Helpers
+
+@{
+    ViewBag.Title = "Список исполнительных производств";
+    bool useExternalHelper = ViewData["UseExternalHelper"] != null && (bool)ViewData["UseExternalHelper"];
+}
+
+<h2>Список исполнительных производств ФСПП</h2>
+
+<p>
+    @Html.ActionLink("Создать новое", "Create")
+</p>
+
+<table class="table">
+    <tr>
+        <th>@Html.DisplayName("Id")</th>
+        <th>@Html.DisplayName("ФИО должника")</th>
+        <th>@Html.DisplayName("Номер дела")</th>
+        <th>@Html.DisplayName("Дата возбуждения")</th>
+        <th>@Html.DisplayName("Сумма")</th>
+        <th>@Html.DisplayName("Статус")</th>
+        <th>Действия</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.Id)</td>
+            <td>@Html.DisplayFor(modelItem => item.DebtorName)</td>
+            <td>@Html.DisplayFor(modelItem => item.CaseNumber)</td>
+            <td>@Html.DisplayFor(modelItem => item.CaseOpenDate)</td>
+            <td>@Html.DisplayFor(modelItem => item.DebtAmount)</td>
+            <td>@Html.DisplayFor(modelItem => item.CaseStatus)</td>
+            <td>
+                @Html.ActionLink("Подробнее", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Редактировать", "Edit", new { id = item.Id })
+            </td>
+        </tr>
+        <tr>
+            <td colspan="7">
+                @if (useExternalHelper)
+                {
+                    @Html.CaseStatistics(item.DebtAmount, item.CaseStatus)
+                }
+                else
+                {
+                    @InternalHelper(item.DebtAmount, item.CaseStatus)
+                }
+            </td>
+        </tr>
+    }
+</table>
+
+<p>
+    @Html.ActionLink("Демонстрация вспомогательных методов", "HelperDemo")
+</p>
+
+@* Внутренний вспомогательный метод *@
+@helper InternalHelper(decimal debtAmount, string caseStatus)
+{
+    string cssClass = caseStatus == "Завершено" ? "completed-case" : "active-case";
+    string message;
+    
+    if (caseStatus == "Завершено")
+    {
+        message = "Исполнительное производство завершено.";
+    }
+    else if (debtAmount > 50000)
+    {
+        message = "Приоритетное взыскание!";
+    }
+    else
+    {
+        message = "В работе.";
+    }
+    
+    <div class="internal-helper @cssClass">
+        <h4>Внутренний Helper</h4>
+        <p>Сумма к взысканию: <strong>@debtAmount.ToString("C")</strong></p>
+        <p>Текущее состояние: <strong>@caseStatus</strong></p>
+        <p><em>@message</em></p>
+    </div>
+} 
